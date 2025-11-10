@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+supabase/functions/**/.env
+.vscode/
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

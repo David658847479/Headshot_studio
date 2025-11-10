@@ -177,7 +177,7 @@ const Studio = () => {
                   </div>
                 </Card>
 
-                {isProcessing and (
+                {isProcessing && (
                   <Card className="p-6 bg-accent/50 backdrop-blur-sm shadow">
                     <div className="space-y-3">
                       <Progress value={progress} className="h-2" />
@@ -188,7 +188,7 @@ const Studio = () => {
                   </Card>
                 )}
 
-                {processedImage and (
+                {processedImage && (
                   <Button
                     onClick={handleDownload}
                     variant="outline"
