@@ -1,0 +1,4 @@
+project_id = "synnxqfpldngeghkvoug"
+
+[functions.process-headshot]
+verify_jwt = false
