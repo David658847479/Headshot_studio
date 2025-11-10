@@ -11,7 +11,7 @@ import { useImageProcessor } from "@/hooks/useImageProcessor";
 const Studio = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
-  const [backgroundPreset, setBackgroundPreset] = useState("neutral-gray");
+  const [backgroundPreset, setBackgroundPreset] = useState("neutral");
   const [relightIntensity, setRelightIntensity] = useState([50]);
   const [skinSmoothing, setSkinSmoothing] = useState([10]);
   const [exportFormat, setExportFormat] = useState<"4:5" | "1:1">("4:5");
@@ -52,8 +52,8 @@ const Studio = () => {
         skinSmoothing: skinSmoothing[0],
         exportFormat,
         facialExpression,
-        suitColor: suitColor || undefined,
-        tieColor: tieColor || undefined,
+        suitColor: suitColor.trim() || undefined,
+        tieColor: tieColor.trim() || undefined,
         faceIndex
       });
       setProcessedImage(result);
@@ -255,6 +255,56 @@ const Studio = () => {
                       {preset.label}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div className="mb-8 space-y-4">
+                <div>
+                  <Label className="text-sm font-semibold mb-2 block text-foreground">
+                    Color del traje (opcional)
+                  </Label>
+                  <input
+                    type="text"
+                    value={suitColor}
+                    onChange={(event) => setSuitColor(event.target.value)}
+                    placeholder="Ej. navy, charcoal gray"
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold mb-2 block text-foreground">
+                    Color de la corbata (opcional)
+                  </Label>
+                  <input
+                    type="text"
+                    value={tieColor}
+                    onChange={(event) => setTieColor(event.target.value)}
+                    placeholder="Ej. burgundy, striped blue"
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold mb-2 block text-foreground">
+                    Índice de rostro (para fotos grupales)
+                  </Label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={5}
+                    value={faceIndex}
+                    onChange={(event) => {
+                      const value = Number(event.target.value);
+                      if (Number.isNaN(value)) {
+                        setFaceIndex(0);
+                        return;
+                      }
+                      setFaceIndex(Math.max(0, Math.min(5, Math.floor(value))));
+                    }}
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  />
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Si la foto tiene varias personas, indica qué rostro debe priorizar la IA (0 es el primero).
+                  </p>
                 </div>
               </div>
 

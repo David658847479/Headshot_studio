@@ -72,6 +72,19 @@ Esto levantará un servidor que servirá la versión construida para verificar q
 
 Si alguno de los pasos falla, revisa que las variables de entorno sean correctas y que tu proyecto de Supabase permita las operaciones necesarias.
 
+## Checklist de APIs y secretos imprescindibles
+
+Para evitar errores de red o mensajes como `imageBase64 is required`, revisa que todo lo siguiente esté configurado antes de probar en local o en producción:
+
+- **Supabase REST y funciones:**
+  - La URL y clave pública deben estar presentes en tu `.env` (`VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`). La aplicación no se cargará si faltan, mostrando un error explícito en consola.
+  - En el [dashboard de Supabase](https://supabase.com/dashboard) verifica que la función edge `process-headshot` aparece en la sección **Functions**.
+- **Lovable AI:**
+  - Define `LOVABLE_API_KEY` como secreto de Supabase (`supabase secrets set LOVABLE_API_KEY="..."`). Si falta, las invocaciones fallarán con `LOVABLE_API_KEY is not configured`.
+  - Asegúrate de tener créditos y de no haber alcanzado el rate limit; de lo contrario verás errores `CREDITS_EXHAUSTED` o `RATE_LIMITED` en la UI.
+- **Pruebas rápidas:**
+  - Ejecuta `supabase functions serve process-headshot --env-file supabase/functions/process-headshot/.env` y, en otra terminal, `npm run dev`. En la consola del navegador podrás confirmar si la petición POST al endpoint `process-headshot` responde `200`.
+
 ## Configurar y probar la función de Supabase
 
 La función edge `process-headshot` vive en `supabase/functions/process-headshot`. Es la encargada de llamar a la API de Lovable y devolver la imagen procesada. Para evitar errores al ejecutar la app:
