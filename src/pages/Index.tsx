@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Sparkles, Zap, Shield } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Shield, LayoutDashboard, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBeforeImage from "@/assets/hero-before.jpg";
 import heroAfterImage from "@/assets/hero-after.jpg";
+import { BeforeAfterSlider } from "@/components/before-after-slider";
 
 const Index = () => {
   const features = [
@@ -11,6 +13,26 @@ const Index = () => {
     { icon: Zap, title: "Procesamiento rápido", description: "Resultados profesionales en menos de 2 minutos" },
     { icon: Shield, title: "100% privado", description: "Tus fotos se procesan de forma segura y se eliminan después" },
   ];
+
+  const demoHighlights = [
+    {
+      icon: LayoutDashboard,
+      title: "Controles intuitivos",
+      description: "Prueba los ajustes clave como iluminación y suavizado antes de subir tu foto real."
+    },
+    {
+      icon: Palette,
+      title: "Fondos profesionales",
+      description: "Visualiza cómo cambia el resultado con distintos presets corporativos."
+    },
+    {
+      icon: Sparkles,
+      title: "Resultado instantáneo",
+      description: "Comprueba el acabado final con un ejemplo generado por la IA."
+    }
+  ];
+
+  const [showDemo, setShowDemo] = useState(false);
 
   return (
     <div className="min-h-screen">
@@ -34,22 +56,52 @@ const Index = () => {
                     <ArrowRight />
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg">
-                  Ver demo
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setShowDemo((prev) => !prev)}
+                  aria-pressed={showDemo}
+                >
+                  {showDemo ? "Ocultar demo" : "Ver demo"}
                 </Button>
               </div>
             </div>
             <Card className="p-4 bg-card/80 backdrop-blur-sm shadow border-2 border-border">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Antes</p>
-                  <img src={heroBeforeImage} alt="Before" className="w-full rounded-lg shadow-md" />
+              {showDemo ? (
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-xs font-semibold text-primary mb-3 uppercase tracking-wide text-center">
+                      Demo interactiva
+                    </p>
+                    <BeforeAfterSlider
+                      before={heroBeforeImage}
+                      after={heroAfterImage}
+                      beforeLabel="Antes"
+                      afterLabel="Después"
+                    />
+                  </div>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {demoHighlights.map((item) => (
+                      <div key={item.title} className="rounded-lg bg-secondary/50 p-4 text-secondary-foreground">
+                        <item.icon className="mb-3 h-6 w-6 text-primary" />
+                        <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
+                        <p className="text-xs text-muted-foreground">{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">Después</p>
-                  <img src={heroAfterImage} alt="After" className="w-full rounded-lg shadow-md ring-2 ring-primary/20" />
+              ) : (
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Antes</p>
+                    <img src={heroBeforeImage} alt="Before" className="w-full rounded-lg shadow-md" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">Después</p>
+                    <img src={heroAfterImage} alt="After" className="w-full rounded-lg shadow-md ring-2 ring-primary/20" />
+                  </div>
                 </div>
-              </div>
+              )}
             </Card>
           </div>
         </div>

@@ -68,6 +68,7 @@ Esto levantará un servidor que servirá la versión construida para verificar q
 2. Ejecuta `npm run dev` y abre [http://localhost:5173](http://localhost:5173) para comprobar la versión en modo desarrollo con recarga en caliente.
 3. Para validar la build de producción usa `npm run build` seguido de `npm run preview` y visita [http://localhost:4173](http://localhost:4173).
 4. Desde el navegador, prueba subir una imagen y revisa la consola de desarrollador (DevTools) para confirmar que no aparezcan errores de red con Supabase.
+5. Si solo quieres una muestra rápida del resultado, en la página de inicio pulsa **Ver demo** para abrir la vista previa interactiva antes/después.
 
 Si alguno de los pasos falla, revisa que las variables de entorno sean correctas y que tu proyecto de Supabase permita las operaciones necesarias.
 
