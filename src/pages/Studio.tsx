@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { useImageProcessor } from "@/hooks/useImageProcessor";
+import ApiStatusBanner from "@/components/api-status-banner";
 
 const Studio = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
@@ -97,6 +98,8 @@ const Studio = () => {
             Transforma tu foto en un headshot profesional con IA en segundos
           </p>
         </div>
+
+        <ApiStatusBanner />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-8 max-w-7xl mx-auto">
           <div className="space-y-6">

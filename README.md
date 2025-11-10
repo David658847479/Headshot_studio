@@ -69,6 +69,7 @@ Esto levantará un servidor que servirá la versión construida para verificar q
 3. Para validar la build de producción usa `npm run build` seguido de `npm run preview` y visita [http://localhost:4173](http://localhost:4173).
 4. Desde el navegador, prueba subir una imagen y revisa la consola de desarrollador (DevTools) para confirmar que no aparezcan errores de red con Supabase.
 5. Si solo quieres una muestra rápida del resultado, en la página de inicio pulsa **Ver demo** para abrir la vista previa interactiva antes/después.
+6. En la vista de **Studio** verás un banner que verifica Supabase y Lovable automáticamente; si algo falta, te mostrará qué credencial debes añadir.
 
 Si alguno de los pasos falla, revisa que las variables de entorno sean correctas y que tu proyecto de Supabase permita las operaciones necesarias.
 
@@ -84,6 +85,17 @@ Para evitar errores de red o mensajes como `imageBase64 is required`, revisa que
   - Asegúrate de tener créditos y de no haber alcanzado el rate limit; de lo contrario verás errores `CREDITS_EXHAUSTED` o `RATE_LIMITED` en la UI.
 - **Pruebas rápidas:**
   - Ejecuta `supabase functions serve process-headshot --env-file supabase/functions/process-headshot/.env` y, en otra terminal, `npm run dev`. En la consola del navegador podrás confirmar si la petición POST al endpoint `process-headshot` responde `200`.
+  - Lanza `npm run check:apis` para que el script lea tu `.env`, invoque la función edge y te indique si falta desplegarla o definir `LOVABLE_API_KEY`.
+
+## Diagnóstico automático de APIs
+
+Si quieres confirmar en segundos qué credenciales debes facilitar, usa el verificador incluido:
+
+```bash
+npm run check:apis
+```
+
+El script comprobará que existan `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` en tu `.env`. Después hará una llamada a la función `process-headshot` con un `healthCheck` que responde `ok` cuando Supabase tiene desplegada la función y el secreto `LOVABLE_API_KEY` activo. Si hay errores, te indicará exactamente qué variable está pendiente para que puedas compartirla o configurarla antes de las pruebas.
 
 ## Configurar y probar la función de Supabase
 

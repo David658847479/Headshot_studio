@@ -7,6 +7,13 @@ const corsHeaders = {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
+    });
+  }
+
   try {
     const payload = await req.json().catch(() => null);
     if (!payload || typeof payload !== 'object') {
@@ -14,6 +21,22 @@ serve(async (req) => {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
+    }
+
+    const { healthCheck = false } = payload as { healthCheck?: boolean };
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+
+    if (healthCheck) {
+      const missing: string[] = [];
+      if (!LOVABLE_API_KEY) missing.push("LOVABLE_API_KEY");
+
+      return new Response(
+        JSON.stringify({ ok: missing.length === 0, missing }),
+        {
+          status: missing.length === 0 ? 200 : 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        }
+      );
     }
 
     const {
@@ -34,7 +57,6 @@ serve(async (req) => {
       });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
     const base64Data = imageBase64.startsWith('data:') ? imageBase64.split(',')[1] : imageBase64;

@@ -69,7 +69,18 @@ export const useImageProcessor = () => {
         }
       });
 
-      if (error) throw new Error(error.message || 'Failed to process image');
+      if (error) {
+        if (error.message?.includes('Function not found')) {
+          throw new Error('La función edge process-headshot no está desplegada en Supabase. Ejecuta "supabase functions deploy process-headshot".');
+        }
+
+        throw new Error(error.message || 'Failed to process image');
+      }
+      if (data && typeof data === 'object' && 'error' in data && data.error) {
+        const message = typeof data.error === 'string' ? data.error : 'Error al procesar la imagen';
+        throw new Error(message);
+      }
+
       if (!data?.processedImage) throw new Error('No processed image returned');
 
       setProgress(80);
